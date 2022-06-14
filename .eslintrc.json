@@ -1,0 +1,61 @@
+{
+  "extends": [
+    "airbnb-typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:import/recommended",
+    "plugin:jsx-a11y/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true,
+      "arrowFunctions": true,
+      "destructuring": true,
+      "experimentalObjectRestSpread": true,
+      "restParams": true,
+      "spread": true,
+      "templateStrings": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": [
+    "jsx-a11y",
+    "import",
+    "react",
+    "react-hooks",
+    "@typescript-eslint"
+  ],
+  "root": true,
+  "rules": {
+    "@typescript-eslint/comma-dangle": 1,
+    "import/named": 0,
+    "no-console": 1,
+    "quotes": ["warn", "single"],
+    "@typescript-eslint/quotes": ["warn", "single"],
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["state"]
+      }
+    ],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["hrefLeft", "hrefRight"],
+        "aspects": ["invalidHref", "preferButton"]
+      }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["@mui/*/*/*", "!@mui/material/test-utils/*"]
+      }
+    ],
+    "react/react-in-jsx-scope": 0
+  }
+}
