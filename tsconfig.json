@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module":"ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "exactOptionalPropertyTypes": true,
+    "jsx": "preserve",
+    "extendedDiagnostics": true,
+    "listEmittedFiles": true
+  },
+  "include": ["src", "**/*.ts", "**/*.tsx", "**/*js"],
+  "exclude": ["node_modules", "build"]
+}

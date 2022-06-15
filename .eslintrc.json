@@ -19,7 +19,8 @@
       "spread": true,
       "templateStrings": true
     },
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": "tsconfig.json"
   },
   "plugins": [
     "jsx-a11y",
