@@ -14,6 +14,8 @@ module.exports = {
       xl: '1440px',
     },
     colors: {
+      'white': '#fff',
+      'scarlet': '#ed6a5a',
     },
     fontFamily: {
     },
