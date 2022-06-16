@@ -17,6 +17,7 @@ module.exports = {
       'white': '#fff',
       'scarlet': '#ed6a5a',
       'brandGreen': 'rgba(10, 135, 84, 0.5)',
+      'blue': '#508ca4',
     },
     fontFamily: {
     },
@@ -47,6 +48,7 @@ module.exports = {
       });
       addBase({
         'h4': { fontSize: '32px' },
+        'h5': { fontSize: '24px' },
         'h6': { fontSize: '18px' },
       });
     }),
