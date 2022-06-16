@@ -37,9 +37,7 @@ module.exports = {
         },
       });
       addBase({
-        'h1': { fontSize: theme('fontSize.2xl') },
-        'h2': { fontSize: theme('fontSize.xl') },
-        'h3': { fontSize: theme('fontSize.lg') },
+        'h6': { fontSize: '18px' },
       });
     }),
     require('@tailwindcss/typography'),
