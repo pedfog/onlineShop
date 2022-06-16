@@ -32,7 +32,14 @@
   "root": true,
   "rules": {
     "@typescript-eslint/comma-dangle": 1,
+    "react-hooks/exhaustive-deps": 1,
     "import/named": 0,
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
     "no-console": 1,
     "quotes": ["warn", "single"],
     "@typescript-eslint/quotes": ["warn", "single"],
@@ -58,5 +65,10 @@
       }
     ],
     "react/react-in-jsx-scope": 0
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

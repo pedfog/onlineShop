@@ -1,0 +1,15 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@font-face {
+  font-family: Nunito;
+  src: url(Nunito-VariableFont_wght.ttf);
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: NunitoBold;
+  src: url(Nunito-Bold.ttf);
+  font-weight: bold;
+}
