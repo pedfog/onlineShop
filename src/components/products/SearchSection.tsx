@@ -1,4 +1,5 @@
-import { ReactElement, useRef, FormEvent, ChangeEvent } from 'react';
+import { ReactElement, useEffect, useRef, useState, FormEvent, ChangeEvent } from 'react';
+import axios from 'axios';
 
 interface Props {
   onSubmit: (input: string) => void;
@@ -6,6 +7,14 @@ interface Props {
 
 export default function Search({ onSubmit }: Props): ReactElement {
   const inputValue = useRef<string>('');
+
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    axios.get<string[]>('https://fakestoreapi.com/products/categories')
+      .then((res: { data: string[] }) => setCategories(res.data))
+      .catch(() => { });
+  }, []);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     e.preventDefault();
@@ -16,7 +25,7 @@ export default function Search({ onSubmit }: Props): ReactElement {
   };
 
   return (
-    <div className="mt-8 md:mt-14 mx-4 md:mx-8">
+    <div className="flex mt-8 md:mt-14 mx-4 md:mx-8">
       <form onSubmit={handleSubmit} className="rounded-full px-5 py-2 w-[50%] md:w-[30%] border-2 flex items-center">
         <button type="submit" onSubmit={handleSubmit} className="">
           <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" className="">
@@ -25,6 +34,18 @@ export default function Search({ onSubmit }: Props): ReactElement {
         </button>
         <input type="text" onChange={onInputChange} className="outline-0 pl-4 w-full" />
       </form>
+      <select
+        name="categories"
+        id="categories"
+        className="w-[50%] md:w-[30%] outline-0 ml-8 md:ml-16 bg-white border-b px-2"
+      >
+        <option selected disabled>Category</option>
+        {(categories && categories[0]) ? categories.map((category) => (
+          <option key={category} value={category} className="capitalize">
+            {category}
+          </option>
+        )) : null}
+      </select>
     </div>
   );
 }

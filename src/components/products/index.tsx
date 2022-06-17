@@ -1,16 +1,15 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState, useMemo, useRef } from 'react';
 import axios from 'axios';
-import ProductCard from './ProductCard';
+import ProductsList from './ProductsList';
 import SearchSection from './SearchSection';
 import { Product } from './productType';
 
 export default function Products(): ReactElement {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<number>(0);
+  const x = useRef(0);
 
   useEffect(() => {
-    axios.get<Product[]>('https://fakestoreapi.com/products')
-      .then((res: { data: Product[] }) => setProducts(res.data))
-      .catch(() => { });
+
   }, []);
 
   const onSearchSubmit = (value: string) => {
@@ -20,11 +19,7 @@ export default function Products(): ReactElement {
   return (
     <>
       <SearchSection onSubmit={onSearchSubmit} />
-      <div className="grid gap-16 grid-cols-3 mx-4 md:mx-8 mt-8 md:mt-16">
-        {(products && products[0]) ? products.map((product) => (
-          <ProductCard key={product.id} data={product} />
-        )) : null}
-      </div>
+      <ProductsList />
     </>
   );
 }
