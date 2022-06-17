@@ -1,24 +1,16 @@
-import { ReactElement, useEffect, useRef, useState, FormEvent, ChangeEvent } from 'react';
-import axios from 'axios';
+import { ReactElement, useRef, FormEvent, ChangeEvent, memo } from 'react';
 
 interface Props {
   onSubmit: (input: string) => void;
+  onChangeCategory: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export default function Search({ onSubmit }: Props): ReactElement {
+const Search = ({ onSubmit, onChangeCategory }: Props): ReactElement => {
   const inputValue = useRef<string>('');
-
-  const [categories, setCategories] = useState<string[]>([]);
-
-  useEffect(() => {
-    axios.get<string[]>('https://fakestoreapi.com/products/categories')
-      .then((res: { data: string[] }) => setCategories(res.data))
-      .catch(() => { });
-  }, []);
-
+  
   const handleSubmit = (e: FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     e.preventDefault();
-    onSubmit(inputValue.current);
+    onSubmit(inputValue.current.toLowerCase());
   };
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     inputValue.current = e.target.value;
@@ -38,14 +30,15 @@ export default function Search({ onSubmit }: Props): ReactElement {
         name="categories"
         id="categories"
         className="w-[50%] md:w-[30%] outline-0 ml-8 md:ml-16 bg-white border-b px-2"
+        onChange={onChangeCategory}
       >
-        <option selected disabled>Category</option>
-        {(categories && categories[0]) ? categories.map((category) => (
-          <option key={category} value={category} className="capitalize">
-            {category}
-          </option>
-        )) : null}
+        <option selected disabled className="capitalize">Category</option>
+        <option value="electronics" className="capitalize">Electronics</option>
+        <option value="jewelery" className="capitalize">Jewelery</option>
+        <option value="men's clothing" className="capitalize">{'Men\'s Clothing'}</option>
+        <option value="women's clothing" className="capitalize">{'Women\'s Clothing'}</option>
       </select>
     </div>
   );
-}
+};
+export default memo(Search);
