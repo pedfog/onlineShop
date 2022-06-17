@@ -31,8 +31,9 @@ const Search = ({ onSubmit, onChangeCategory }: Props): ReactElement => {
         id="categories"
         className="w-[50%] md:w-[30%] outline-0 ml-8 md:ml-16 bg-white border-b px-2"
         onChange={onChangeCategory}
+        defaultValue="category"
       >
-        <option selected disabled className="capitalize">Category</option>
+        <option value="category" disabled className="capitalize">Category</option>
         <option value="electronics" className="capitalize">Electronics</option>
         <option value="jewelery" className="capitalize">Jewelery</option>
         <option value="men's clothing" className="capitalize">{'Men\'s Clothing'}</option>

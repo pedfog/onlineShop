@@ -34,7 +34,7 @@ export default function Products(): ReactElement {
   return (
     <>
       <SearchSection onSubmit={onSearchSubmit} onChangeCategory={onChangeCategory} />
-      <div className="grid gap-16 grid-cols-3 mx-4 md:mx-8 mt-8 md:mt-16">
+      <div className="grid gap-16 lg:gap-8 xl:gap-16 md:grid-cols-2 lg:grid-cols-3 mx-4 md:mx-8 mt-8 md:mt-16">
         {(products && products[0]) ? products.map((product) => (
           <ProductCard key={product.id} data={product} />
         )) : null}
