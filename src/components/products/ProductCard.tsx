@@ -1,8 +1,15 @@
 import { ReactElement } from 'react';
+import { useAppDispatch } from '../../app/hooks/reduxHooks';
 import { Product } from './productType';
+import { setCartCount } from './CartItemsSlice';
 
 export default function ProductCard({ data }: { data: Product }): ReactElement {
+  const dispatch = useAppDispatch();
   const { title, description } = data;
+
+  const handleCartItems = () => {
+    dispatch(setCartCount('add'));
+  };
 
   return (
     <div className="flex flex-col shadow-md h-[500px]">
@@ -19,7 +26,7 @@ export default function ProductCard({ data }: { data: Product }): ReactElement {
           <p>
             {`price ${data.price}`} &#36;
           </p>
-          <button className="px-8 py-2 bg-blue">
+          <button className="px-8 py-2 bg-blue text-white" onClick={handleCartItems}>
             Add to cart
           </button>
         </div>

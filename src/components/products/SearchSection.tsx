@@ -7,7 +7,7 @@ interface Props {
 
 const Search = ({ onSubmit, onChangeCategory }: Props): ReactElement => {
   const inputValue = useRef<string>('');
-  
+
   const handleSubmit = (e: FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     e.preventDefault();
     onSubmit(inputValue.current.toLowerCase());
