@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks/reduxHooks';
 import { Product } from './productType';
 import { setCartCount } from './CartItemsSlice';
@@ -7,13 +7,19 @@ export default function ProductCard({ data }: { data: Product }): ReactElement {
   const dispatch = useAppDispatch();
   const { title, description } = data;
 
+  const [isLoading, setIsLoading] = useState<{ isBtnDisabled: boolean, showSnackBar: boolean }>(
+    { isBtnDisabled: false, showSnackBar: false },
+  );
+
   const handleCartItems = () => {
+    setIsLoading((prev) => ({ ...prev, showSnackBar: false, isBtnDisabled: true }));
     const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as Product[] | [];
     const isItemAlreadyAdded = cartItems.some((item) => item.id === data.id);
     dispatch(setCartCount(isItemAlreadyAdded ? '' : 'add'));
     if (!isItemAlreadyAdded) {
       localStorage.setItem('cartItems', JSON.stringify([...cartItems, data]));
     }
+    setIsLoading((prev) => ({ ...prev, showSnackBar: true, isBtnDisabled: false }));
   };
 
   return (
@@ -31,11 +37,21 @@ export default function ProductCard({ data }: { data: Product }): ReactElement {
           <p>
             {`price ${data.price}`} &#36;
           </p>
-          <button className="px-8 py-2 bg-blue text-white" onClick={handleCartItems}>
+          <button
+            className="px-8 py-2 bg-blue text-white disabled:"
+            onClick={handleCartItems}
+            type="button"
+            disabled={isLoading.isBtnDisabled}
+          >
             Add to cart
           </button>
         </div>
       </div>
+      {(isLoading.showSnackBar) ? (
+      <div className="fixed bottom-2 left-2 text-white px-4 py-2 bg-successGreen rounded animate-fade opacity-0">
+        Item added to your card successfully
+      </div>
+      ) : null}
     </div>
   );
 }
