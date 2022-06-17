@@ -13,7 +13,10 @@ const cartItemsSlice = createSlice({
   initialState,
   reducers: {
     setCartCount: (state, action: PayloadAction<string | null>) => {
-      return ({ ...state, cartItemsCount: `${Number(state.cartItemsCount) + 1}` });
+      if (action.payload === 'add') {
+        return ({ ...state, cartItemsCount: `${Number(state.cartItemsCount) + 1}` });
+      }
+      return;
     },
   },
 });

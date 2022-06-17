@@ -8,7 +8,12 @@ export default function ProductCard({ data }: { data: Product }): ReactElement {
   const { title, description } = data;
 
   const handleCartItems = () => {
-    dispatch(setCartCount('add'));
+    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as Product[] | [];
+    const isItemAlreadyAdded = cartItems.some((item) => item.id === data.id);
+    dispatch(setCartCount(isItemAlreadyAdded ? '' : 'add'));
+    if (!isItemAlreadyAdded) {
+      localStorage.setItem('cartItems', JSON.stringify([...cartItems, data]));
+    }
   };
 
   return (
