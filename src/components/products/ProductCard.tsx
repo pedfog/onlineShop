@@ -2,6 +2,8 @@ import { ReactElement } from 'react';
 import { Product } from './productType';
 
 export default function ProductCard({ data }: { data: Product }): ReactElement {
+  const { title, description } = data;
+
   return (
     <div className="flex flex-col shadow-md h-[500px]">
       <div className="h-[40%] flex justify-center w-full shadow-md">
@@ -9,9 +11,10 @@ export default function ProductCard({ data }: { data: Product }): ReactElement {
       </div>
       <div className="flex flex-col justify-between h-[60%] p-8">
           <h5 className="mb-4">
-            {data.title}
+            {title.substring(0, 75) + (title.length > 75 ? ' ...' : '')}
           </h5>
-          <p>{data.description}</p>
+          <p>{description.substring(0, 251) + (description.length > 251 ? ' ...' : '')}</p>
+          <p className="font-medium">{data.category}</p>
           <div className="flex items-center justify-between">
             <p>{`price ${data.price}`} &#36;</p>
             <button className="px-8 py-2 bg-blue">
