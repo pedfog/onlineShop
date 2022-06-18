@@ -8,7 +8,7 @@ import Cart from './components/navbar/Cart';
 export default function App(): ReactElement {
   return (
     <>
-    <Navbar />
+      <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />}>
           <Route path="cart" element={<Cart />} />

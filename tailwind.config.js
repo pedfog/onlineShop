@@ -17,6 +17,7 @@ module.exports = {
       'white': '#fff',
       'scarlet': '#ed6a5a',
       'brandGreen': 'rgba(10, 135, 84, 0.5)',
+      'successGreen': 'rgba(10, 135, 84)',
       'blue': '#508ca4',
     },
     fontFamily: {
@@ -34,6 +35,16 @@ module.exports = {
       spacing: {
       },
       borderRadius: {
+      },
+      keyframes: {
+        fade: {
+          '0%': { opacity: 0, zIndex: 1000 },
+          '20%, 80%': { opacity: 1, zIndex: 1000 },
+          '100%': { opacity: 0, zIndex: 1000 },
+        },
+      },
+      animation: {
+        fade: 'fade 5s',
       },
     },
   },
