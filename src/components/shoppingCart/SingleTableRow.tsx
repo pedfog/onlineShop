@@ -1,17 +1,20 @@
 import { ReactElement, useState, memo } from 'react';
 import { AddIcon, RemoveIcon, TrashCanIcon } from './icons';
-import { Product } from '../products/productType';
 
 interface Props {
+  id: number;
   title: string;
   description: string;
   price: number;
   index: number;
   add: (price: number) => void;
   remove: (price: number) => void;
+  onDelete: (id: number) => void;
 }
 
-const SingleTableRow = ({ title, description, price, index, add, remove }: Props): ReactElement => {
+const SingleTableRow = ({
+  id, title, description, price, index, add, remove, onDelete,
+}: Props): ReactElement => {
   const [quantity, setQuantity] = useState<number>(1);
 
   const deductQuantity = () => {
@@ -50,7 +53,7 @@ const SingleTableRow = ({ title, description, price, index, add, remove }: Props
       <td className="text-center py-8">{price} &#36;</td>
       <td className="text-center py-8">{quantity * price} &#36;</td>
       <td className="text-center">
-        <button className="w-max mx-auto p-2 bg-scarlet rounded-full">
+        <button onClick={() => onDelete(id)} className="w-max mx-auto p-2 bg-scarlet rounded-full">
           <TrashCanIcon />
         </button>
       </td>

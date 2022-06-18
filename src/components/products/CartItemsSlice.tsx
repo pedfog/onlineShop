@@ -17,6 +17,9 @@ const cartItemsSlice = createSlice({
       if (action.payload === 'add') {
         return ({ ...state, cartItemsCount: `${Number(state.cartItemsCount) + 1}` });
       }
+      if (action.payload === 'delete') {
+        return ({ ...state, cartItemsCount: `${Number(state.cartItemsCount) - 1}` });
+      }
       return;
     },
   },
