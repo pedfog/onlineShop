@@ -12,14 +12,16 @@ export default function ProductCard({ data }: { data: Product }): ReactElement {
   );
 
   const handleCartItems = () => {
-    setIsLoading((prev) => ({ ...prev, showSnackBar: false, isBtnDisabled: true }));
+    setIsLoading({ showSnackBar: false, isBtnDisabled: true });
     const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as Product[] | [];
     const isItemAlreadyAdded = cartItems.some((item) => item.id === data.id);
     dispatch(setCartCount(isItemAlreadyAdded ? '' : 'add'));
     if (!isItemAlreadyAdded) {
       localStorage.setItem('cartItems', JSON.stringify([...cartItems, data]));
     }
-    setIsLoading((prev) => ({ ...prev, showSnackBar: true, isBtnDisabled: false }));
+    setTimeout(() => {
+      setIsLoading({ showSnackBar: true, isBtnDisabled: false });
+    }, 500);
   };
 
   return (
@@ -38,19 +40,29 @@ export default function ProductCard({ data }: { data: Product }): ReactElement {
             {`price ${data.price}`} &#36;
           </p>
           <button
-            className="px-8 py-2 bg-blue text-white disabled:"
+            className="flex items-center relative px-8 py-2 bg-blue text-white"
             onClick={handleCartItems}
             type="button"
             disabled={isLoading.isBtnDisabled}
           >
+            <svg
+              className="absolute animate-spin left-2 h-5 w-5 text-white"
+              style={{ display: isLoading.isBtnDisabled ? 'block' : 'none' }}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
             Add to cart
           </button>
         </div>
       </div>
       {(isLoading.showSnackBar) ? (
-      <div className="fixed bottom-2 left-2 text-white px-4 py-2 bg-successGreen rounded animate-fade opacity-0">
-        Item added to your card successfully
-      </div>
+        <div className="fixed bottom-2 left-2 text-white px-4 py-2 bg-successGreen rounded animate-fade opacity-0">
+          Item added to your card successfully
+        </div>
       ) : null}
     </div>
   );
