@@ -31,7 +31,13 @@ export default function ShoppingCart(): ReactElement {
       <tbody className="table-body">
         <>
           {(cartItems && cartItems[0]) ? cartItems.map((item, index) => (
-            <SingleTableRow key={item.id} product={item} index={index} />
+            <SingleTableRow
+              key={item.id}
+              product={item}
+              index={index}
+              add={(price) => setTotal((prev) => prev + price)}
+              remove={(price) => setTotal((prev) => prev - price)}
+            />
           )) : null}
         </>
         {(cartItems && cartItems[0]) ? (

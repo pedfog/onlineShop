@@ -5,13 +5,22 @@ import { Product } from '../products/productType';
 interface Props {
   product: Product;
   index: number;
+  add: (price: number) => void;
+  remove: (price: number) => void;
 }
 
-const SingleTableRow = ({ product, index }: Props): ReactElement => {
+const SingleTableRow = ({ product, index, add, remove }: Props): ReactElement => {
   const { title, description, price } = product;
   const [quantity, setQuantity] = useState<number>(1);
 
-  const deductQuantity = () => setQuantity((prev) => (prev === 1) ? prev : (prev - 1));
+  const deductQuantity = () => {
+    if (quantity !== 1) { remove(price); }
+    setQuantity((prev) => (prev === 1) ? prev : (prev - 1));
+  };
+  const addQuantity = () => {
+    setQuantity((prev) => prev + 1);
+    add(price);
+  };
 
   return (
     <tr className="border-y-2">
@@ -33,7 +42,7 @@ const SingleTableRow = ({ product, index }: Props): ReactElement => {
           <RemoveIcon />
         </button>
         <span className="font-bold px-4">{quantity}</span>
-        <button onClick={() => setQuantity((prev) => prev + 1)}>
+        <button onClick={addQuantity}>
           <AddIcon />
         </button>
       </td>
