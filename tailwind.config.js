@@ -19,6 +19,7 @@ module.exports = {
       'brandGreen': 'rgba(10, 135, 84, 0.5)',
       'successGreen': 'rgba(10, 135, 84)',
       'blue': '#508ca4',
+      'darkGray': '#e2e2e2',
     },
     fontFamily: {
     },
