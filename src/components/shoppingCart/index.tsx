@@ -1,11 +1,8 @@
 import { ReactElement, useState, useCallback } from 'react';
-import { useAppDispatch } from '../../app/hooks/reduxHooks';
 import SingleTableRow from './SingleTableRow';
-import { setCartCount } from '../products/CartItemsSlice';
 import { Product } from '../products/productType';
 
 export default function ShoppingCart(): ReactElement {
-  const dispatch = useAppDispatch();
 
   const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as Product[];
   const calculateTotalPrice = (): number => {
@@ -18,7 +15,6 @@ export default function ShoppingCart(): ReactElement {
   };
 
   const [total, setTotal] = useState<number>(calculateTotalPrice);
-  const [products, setProducts] = useState<Product[]>(cartItems);
 
   const add = useCallback((price: number) => {
     setTotal((prev) => prev + price);
@@ -26,12 +22,6 @@ export default function ShoppingCart(): ReactElement {
   const remove = useCallback((price: number) => {
     setTotal((prev) => prev - price);
   }, []);
-  const onDelete = ((id: number) => {
-    const newArray = cartItems.filter((item) => item.id !== id);
-    localStorage.setItem('cartItems', JSON.stringify(newArray));
-    setProducts(newArray);
-    dispatch(setCartCount('delete'));
-  });
 
   return (
     <table className="table-auto w-full my-8 border-2">
@@ -48,7 +38,7 @@ export default function ShoppingCart(): ReactElement {
       </thead>
       <tbody className="table-body">
         <>
-          {(products && products[0]) ? products.map((item, index) => (
+          {(cartItems && cartItems[0]) ? cartItems.map((item, index) => (
             <SingleTableRow
               key={item.id}
               id={item.id}
@@ -58,7 +48,6 @@ export default function ShoppingCart(): ReactElement {
               index={index}
               add={add}
               remove={remove}
-              onDelete={onDelete}
             />
           )) : null}
         </>

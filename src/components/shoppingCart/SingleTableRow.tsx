@@ -1,5 +1,8 @@
 import { ReactElement, useState, memo } from 'react';
+import { useAppDispatch } from '../../app/hooks/reduxHooks';
 import { AddIcon, RemoveIcon, TrashCanIcon } from './icons';
+import { setCartCount } from '../products/CartItemsSlice';
+import { Product } from '../products/productType';
 
 interface Props {
   id: number;
@@ -9,12 +12,12 @@ interface Props {
   index: number;
   add: (price: number) => void;
   remove: (price: number) => void;
-  onDelete: (id: number) => void;
 }
 
 const SingleTableRow = ({
-  id, title, description, price, index, add, remove, onDelete,
-}: Props): ReactElement => {
+  id, title, description, price, index, add, remove,
+}: Props): ReactElement | null => {
+  const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState<number>(1);
 
   const deductQuantity = () => {
@@ -25,8 +28,16 @@ const SingleTableRow = ({
     setQuantity((prev) => prev + 1);
     add(price);
   };
+  const deleteProduct = () => {
+    remove(quantity * price);
+    setQuantity(0);
+    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as Product[];
+    const newArray = cartItems.filter((item) => item.id !== id);
+    localStorage.setItem('cartItems', JSON.stringify(newArray));
+    dispatch(setCartCount('delete'));
+  };
 
-  return (
+  return quantity ? (
     <tr className="border-y-2">
       <td className="text-center py-8">{index + 1}</td>
       <td className="relative text-center py-8 [&_span]:hover:opacity-100">
@@ -53,12 +64,12 @@ const SingleTableRow = ({
       <td className="text-center py-8">{price} &#36;</td>
       <td className="text-center py-8">{quantity * price} &#36;</td>
       <td className="text-center">
-        <button onClick={() => onDelete(id)} className="w-max mx-auto p-2 bg-scarlet rounded-full">
+        <button onClick={deleteProduct} className="w-max mx-auto p-2 bg-scarlet rounded-full">
           <TrashCanIcon />
         </button>
       </td>
     </tr>
-  );
+  ) : null;
 };
 
 export default memo(SingleTableRow);
