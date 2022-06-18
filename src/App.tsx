@@ -1,20 +1,20 @@
 import { ReactElement } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/Home';
-import Navbar from './components/navbar';
 import NotFoundPage from './pages/404Page';
-import Cart from './components/navbar/Cart';
+import ShoppingCartPage from './pages/ShoppingCart';
+import Products from './components/products';
 
 export default function App(): ReactElement {
   return (
-    <>
-      <Navbar />
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />}>
-          <Route path="cart" element={<Cart />} />
+          <Route index element={<Products />} />
+          <Route path="/cart" element={<ShoppingCartPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
-        <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </>
+    </BrowserRouter>
   );
 }
