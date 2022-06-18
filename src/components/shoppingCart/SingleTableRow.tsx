@@ -36,8 +36,8 @@ const SingleTableRow = ({ product, index }: Props): ReactElement => {
           </svg>
         </button>
       </td>
-      <td className="text-center py-8">{price}</td>
-      <td className="text-center py-8">{quantity * price}</td>
+      <td className="text-center py-8">{price} &#36;</td>
+      <td className="text-center py-8">{quantity * price} &#36;</td>
       <td className="text-center">
         <button className="w-max mx-auto p-2 bg-scarlet rounded-full">
           <svg

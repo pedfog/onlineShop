@@ -1,9 +1,19 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import SingleTableRow from './SingleTableRow';
 import { Product } from '../products/productType';
 
 export default function ShoppingCart(): ReactElement {
   const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as Product[];
+  const calculateTotalPrice = (): number => {
+    if (cartItems && cartItems[0]) {
+      const prices = cartItems.map((item) => item.price);
+      const totalPrice = prices.reduce((a, b) => a + b);
+      return totalPrice;
+    }
+    return 0;
+  };
+
+  const [total, setTotal] = useState<number>(calculateTotalPrice);
 
   return (
     <table className="table-auto w-full my-8 border-2">
@@ -19,9 +29,22 @@ export default function ShoppingCart(): ReactElement {
         </tr>
       </thead>
       <tbody className="table-body">
-        {(cartItems && cartItems[0]) ? cartItems.map((item, index) => (
-          <SingleTableRow key={item.id} product={item} index={index} />
-        )) : null}
+        <>
+          {(cartItems && cartItems[0]) ? cartItems.map((item, index) => (
+            <SingleTableRow key={item.id} product={item} index={index} />
+          )) : null}
+        </>
+        {(cartItems && cartItems[0]) ? (
+          <tr>
+            <td className="text-center font-bold py-4">Total</td>
+            <td />
+            <td />
+            <td />
+            <td />
+            <td className="text-center font-bold py-4">{total.toFixed(2)} &#36;</td>
+            <td />
+          </tr>
+        ) : null}
       </tbody>
     </table>
   );
