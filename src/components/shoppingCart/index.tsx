@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement, useState, useCallback } from 'react';
 import SingleTableRow from './SingleTableRow';
 import { Product } from '../products/productType';
 
@@ -14,6 +14,13 @@ export default function ShoppingCart(): ReactElement {
   };
 
   const [total, setTotal] = useState<number>(calculateTotalPrice);
+
+  const add = useCallback((price: number) => {
+    setTotal((prev) => prev + price);
+  }, []);
+  const remove = useCallback((price: number) => {
+    setTotal((prev) => prev - price);
+  }, []);
 
   return (
     <table className="table-auto w-full my-8 border-2">
@@ -33,10 +40,12 @@ export default function ShoppingCart(): ReactElement {
           {(cartItems && cartItems[0]) ? cartItems.map((item, index) => (
             <SingleTableRow
               key={item.id}
-              product={item}
+              title={item.title}
+              description={item.description}
+              price={item.price}
               index={index}
-              add={(price) => setTotal((prev) => prev + price)}
-              remove={(price) => setTotal((prev) => prev - price)}
+              add={add}
+              remove={remove}
             />
           )) : null}
         </>

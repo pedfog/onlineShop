@@ -1,16 +1,17 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement, useState, memo } from 'react';
 import { AddIcon, RemoveIcon, TrashCanIcon } from './icons';
 import { Product } from '../products/productType';
 
 interface Props {
-  product: Product;
+  title: string;
+  description: string;
+  price: number;
   index: number;
   add: (price: number) => void;
   remove: (price: number) => void;
 }
 
-const SingleTableRow = ({ product, index, add, remove }: Props): ReactElement => {
-  const { title, description, price } = product;
+const SingleTableRow = ({ title, description, price, index, add, remove }: Props): ReactElement => {
   const [quantity, setQuantity] = useState<number>(1);
 
   const deductQuantity = () => {
@@ -57,4 +58,4 @@ const SingleTableRow = ({ product, index, add, remove }: Props): ReactElement =>
   );
 };
 
-export default SingleTableRow;
+export default memo(SingleTableRow);
