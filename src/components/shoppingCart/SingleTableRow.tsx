@@ -13,9 +13,17 @@ const SingleTableRow = ({ product, index }: Props): ReactElement => {
   return (
     <tr className="border-y-2">
       <td className="text-center py-8">{index + 1}</td>
-      <td className="text-center py-8">{title}</td>
-      <td className="text-center py-8">
+      <td className="relative text-center py-8 [&_span]:hover:opacity-100">
+        {title}
+        <span className="absolute opacity-0 left-0 top-[80%] text-white bg-darkerGray p-4 rounded">
+          {title}
+        </span>
+      </td>
+      <td className="relative text-center py-8 [&_span]:hover:opacity-100">
         {(description.length > 70) ? `${description.substring(0, 70)} ...` : description}
+        <span className="absolute opacity-0 left-0 top-[80%] text-white bg-darkerGray p-4 rounded font-bold">
+          {description}
+        </span>
       </td>
       <td className="flex items-center justify-center py-8">
         <button>
