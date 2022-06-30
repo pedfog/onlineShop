@@ -1,26 +1,26 @@
-import { ReactElement, useState, useCallback } from 'react';
+import { ReactElement, useState, useCallback, useEffect } from 'react';
 import SingleTableRow from './SingleTableRow';
-import { Product } from '../products/productType';
+import { ProductInStorage } from '../products/productType';
 
 export default function ShoppingCart(): ReactElement {
-
-  const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as Product[];
+  const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as ProductInStorage[];
   const calculateTotalPrice = (): number => {
     if (cartItems && cartItems[0]) {
-      const prices = cartItems.map((item) => item.price);
+      const prices = cartItems.map((item) => item?.product?.price * item.quantity);
       const totalPrice = prices.reduce((a, b) => a + b);
       return totalPrice;
     }
     return 0;
   };
+  const totalPrice = calculateTotalPrice();
+  const [total, setTotal] = useState<number>(0);
 
-  const [total, setTotal] = useState<number>(calculateTotalPrice);
+  useEffect(() => {
+    setTotal(totalPrice);
+  }, [cartItems]);
 
-  const add = useCallback((price: number) => {
+  const updatePrice = useCallback((price: number) => {
     setTotal((prev) => prev + price);
-  }, []);
-  const remove = useCallback((price: number) => {
-    setTotal((prev) => prev - price);
   }, []);
 
   return (
@@ -40,14 +40,14 @@ export default function ShoppingCart(): ReactElement {
         <>
           {(cartItems && cartItems[0]) ? cartItems.map((item, index) => (
             <SingleTableRow
-              key={item.id}
-              id={item.id}
-              title={item.title}
-              description={item.description}
-              price={item.price}
+              key={item?.product?.id}
+              id={item?.product?.id}
+              title={item?.product?.title}
+              description={item?.product?.description}
+              price={item?.product?.price}
               index={index}
-              add={add}
-              remove={remove}
+              initialQuantity={item.quantity || 1}
+              updatePrice={updatePrice}
             />
           )) : null}
         </>

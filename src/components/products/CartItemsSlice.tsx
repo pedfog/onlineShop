@@ -1,24 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Product } from '../products/productType';
+import { ProductInStorage } from '../products/productType';
 
 export type CartItems = {
   cartItemsCount: string | null;
 };
 
+const cartItemsCount = JSON.parse(localStorage.getItem('cartItems') || '[]') as ProductInStorage[];
+
 const initialState = {
-  cartItemsCount: `${(JSON.parse(localStorage.getItem('cartItems') || '[]') as Product[] | []).length}`,
+  cartItemsCount: (cartItemsCount.length > 0) ? `${cartItemsCount.reduce((sum, current) => sum + current.quantity, 0)}` : 0,
 } as CartItems;
 
 const cartItemsSlice = createSlice({
   name: 'cartItems',
   initialState,
   reducers: {
-    setCartCount: (state, action: PayloadAction<string | null>) => {
-      if (action.payload === 'add') {
-        return ({ ...state, cartItemsCount: `${Number(state.cartItemsCount) + 1}` });
-      }
-      if ((action.payload === 'delete') && Number(state.cartItemsCount)) {
-        return ({ ...state, cartItemsCount: `${Number(state.cartItemsCount) - 1}` });
+    setCartCount: (state, action: PayloadAction<number | null>) => {
+      if (action.payload) {
+        const storedItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as ProductInStorage[];
+        const count = (storedItems.length > 0) ? storedItems.reduce((sum, current) => sum + current.quantity, 0) : 0;
+        return ({ cartItemsCount: `${count + action.payload}` });
       }
       return;
     },
