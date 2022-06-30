@@ -1,6 +1,6 @@
 import { ReactElement, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks/reduxHooks';
-import { Product } from './productType';
+import { Product, ProductInStorage } from './productType';
 import { setCartCount } from './CartItemsSlice';
 
 export default function ProductCard({ data }: { data: Product }): ReactElement {
@@ -13,11 +13,16 @@ export default function ProductCard({ data }: { data: Product }): ReactElement {
 
   const handleCartItems = () => {
     setIsLoading({ showSnackBar: false, isBtnDisabled: true });
-    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as Product[] | [];
-    const isItemAlreadyAdded = cartItems.some((item) => item.id === data.id);
-    dispatch(setCartCount(isItemAlreadyAdded ? '' : 'add'));
-    if (!isItemAlreadyAdded) {
-      localStorage.setItem('cartItems', JSON.stringify([...cartItems, data]));
+    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as ProductInStorage[] | [];
+    const alreadyExistingItem = cartItems.find((item) => item.product?.id === data.id);
+    dispatch(setCartCount(1));
+    if (!alreadyExistingItem) {
+      localStorage.setItem('cartItems', JSON.stringify([...cartItems, { product: data, quantity: 1 }]));
+    } else {
+      const itemIndex = cartItems.findIndex((item) => item.product?.id === data.id);
+      const newQuantity = alreadyExistingItem.quantity + 1;
+      cartItems[itemIndex] = { product: alreadyExistingItem.product, quantity: newQuantity };
+      localStorage.setItem('cartItems', JSON.stringify([...cartItems]));
     }
     setTimeout(() => {
       setIsLoading({ showSnackBar: true, isBtnDisabled: false });

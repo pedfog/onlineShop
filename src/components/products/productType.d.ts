@@ -10,3 +10,8 @@ export interface Product {
     rate: number,
   }
 }
+
+export interface ProductInStorage {
+  product: Product;
+  quantity: number;
+}

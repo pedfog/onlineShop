@@ -2,7 +2,7 @@ import { ReactElement, useState, memo } from 'react';
 import { useAppDispatch } from '../../app/hooks/reduxHooks';
 import { AddIcon, RemoveIcon, TrashCanIcon } from './icons';
 import { setCartCount } from '../products/CartItemsSlice';
-import { Product } from '../products/productType';
+import { ProductInStorage } from '../products/productType';
 
 interface Props {
   id: number;
@@ -10,31 +10,37 @@ interface Props {
   description: string;
   price: number;
   index: number;
-  add: (price: number) => void;
-  remove: (price: number) => void;
+  initialQuantity: number;
+  updatePrice: (price: number) => void;
 }
 
 const SingleTableRow = ({
-  id, title, description, price, index, add, remove,
+  id, title, description, price, index, initialQuantity, updatePrice,
 }: Props): ReactElement | null => {
   const dispatch = useAppDispatch();
-  const [quantity, setQuantity] = useState<number>(1);
+  const [quantity, setQuantity] = useState<number>(initialQuantity);
 
-  const deductQuantity = () => {
-    if (quantity !== 1) { remove(price); }
-    setQuantity((prev) => (prev === 1) ? prev : (prev - 1));
+  const addOrRemove = (count: number, priceToAddOrRemove: number) => {
+    dispatch(setCartCount(count));
+    if ((count > 0) || ((count < 0) && (quantity !== 1))) { updatePrice(priceToAddOrRemove); }
+    setQuantity((prev) => ((count < 0) && (prev === 1)) ? prev : (prev + count));
+    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as ProductInStorage[];
+    const existingItem = cartItems.find((item) => item?.product?.id === id);
+    const itemIndex = cartItems.findIndex((item) => item.product?.id === id);
+    if (existingItem) {
+      const newQuantity = ((count < 0) && (existingItem.quantity === 1)) ? existingItem.quantity : existingItem.quantity + count;
+      cartItems[itemIndex] = { product: existingItem.product, quantity: newQuantity };
+      localStorage.setItem('cartItems', JSON.stringify([...cartItems]));
+    }
   };
-  const addQuantity = () => {
-    setQuantity((prev) => prev + 1);
-    add(price);
-  };
+
   const deleteProduct = () => {
-    remove(quantity * price);
+    dispatch(setCartCount(-quantity));
+    updatePrice(quantity * -price);
     setQuantity(0);
-    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as Product[];
-    const newArray = cartItems.filter((item) => item.id !== id);
+    const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]') as ProductInStorage[];
+    const newArray = cartItems.filter((item) => item?.product?.id !== id);
     localStorage.setItem('cartItems', JSON.stringify(newArray));
-    dispatch(setCartCount('delete'));
   };
 
   return quantity ? (
@@ -53,11 +59,11 @@ const SingleTableRow = ({
         </span>
       </td>
       <td className="flex items-center justify-center py-8">
-        <button onClick={deductQuantity}>
+        <button onClick={() => addOrRemove(-1, -price)} disabled={quantity === 1}>
           <RemoveIcon />
         </button>
         <span className="font-bold px-4">{quantity}</span>
-        <button onClick={addQuantity}>
+        <button onClick={() => addOrRemove(1, price)}>
           <AddIcon />
         </button>
       </td>
